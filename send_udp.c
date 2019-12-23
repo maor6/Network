@@ -19,20 +19,19 @@ int main(int argc, char *argv[])
   struct hostent *hostptr;
   struct { char head; u_long body; char tail; } msgbuf;
 
-  socket_fd = socket (AF_INET, SOCK_DGRAM, 0);
-  bzero((char *) &dest, sizeof(dest)); /* They say you must do this */
-  hostptr = gethostbyname(argv[1]);
-  dest.sin_family = (short) AF_INET;
-  bcopy(hostptr->h_addr, (char *)&dest.sin_addr,hostptr->h_length);
-  dest.sin_port = htons((u_short)0x3333);
+  socket_fd = socket (AF_INET, SOCK_DGRAM, 0); // creat socket with IPv4 and type UDP and the 0 is default
+  bzero((char *) &dest, sizeof(dest)); /* They say you must do this */    //zero the rest of the dest socket
+  hostptr = gethostbyname(argv[1]);  // get the host info 
+  dest.sin_family = (short) AF_INET; // host byte order (IPv4) 
+  bcopy(hostptr->h_addr, (char *)&dest.sin_addr,hostptr->h_length);  //copy the dest address  
+  
+  dest.sin_port = htons((u_short)0x3333);  // short, network byte order
 
-  msgbuf.head = '<';
-  msgbuf.body = htonl(getpid()); /* IMPORTANT! */
+  msgbuf.head = '<'; 
+  msgbuf.body = htonl(getpid()); /* IMPORTANT! */   // host to network long 
   msgbuf.tail = '>';
 
-  sendto(socket_fd,&msgbuf,sizeof(msgbuf),0,(struct sockaddr *)&dest,
-                  sizeof(dest));
-
+  sendto(socket_fd,&msgbuf,sizeof(msgbuf),0,(struct sockaddr *)&dest,sizeof(dest));  // send the msg 
   return 0;
 }
 

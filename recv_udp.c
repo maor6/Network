@@ -18,6 +18,14 @@ void printsin(struct sockaddr_in *s, char *str1, char *str2) {
   printf("\n");
 }
 */
+
+void printsin(struct sockaddr_in *sin, char *pname, char* msg) {
+	printf("%s : \n", pname);
+	printf("%s : ",msg);
+	printf("ip : %s",sin_in.sin_addr.s_addr
+	
+	
+}
  
 int main(int argc, char *argv[])
 {
@@ -25,25 +33,25 @@ int main(int argc, char *argv[])
   struct sockaddr_in  s_in, from;
   struct { char head; u_long  body; char tail;} msg;
  
-  socket_fd = socket (AF_INET, SOCK_DGRAM, 0);
+  socket_fd = socket (AF_INET, SOCK_DGRAM, 0);   // creat socket with IPv4 protocol UDP and 0 is default
  
-  bzero((char *) &s_in, sizeof(s_in));  /* They say you must do this    */
+  bzero((char *) &s_in, sizeof(s_in));  /* They say you must do this    */ //zero the socket s_in
  
-  s_in.sin_family = (short)AF_INET;
-  s_in.sin_addr.s_addr = htonl(INADDR_ANY);    /* WILDCARD */
-  s_in.sin_port = htons((u_short)0x3333);
+  s_in.sin_family = (short)AF_INET; // host byte order (IPv4)
+  s_in.sin_addr.s_addr = htonl(INADDR_ANY);    /* WILDCARD */   // host to network long
+  s_in.sin_port = htons((u_short)0x3333); // host to network short
  
   //printsin( &s_in, "RECV_UDP", "Local socket is:"); 
-  fflush(stdout);
+  fflush(stdout); // clear stdout 
  
-  bind(socket_fd, (struct sockaddr *)&s_in, sizeof(s_in));
+  bind(socket_fd, (struct sockaddr *)&s_in, sizeof(s_in)); // connect address and the port with socket
  
-  for(;;) {
-    fsize = sizeof(from);
-    cc = recvfrom(socket_fd,&msg,sizeof(msg),0,(struct sockaddr *)&from,&fsize);
+  for(;;) { // to litsen all the time to reqeust
+    fsize = sizeof(from); 
+    cc = recvfrom(socket_fd,&msg,sizeof(msg),0,(struct sockaddr *)&from,&fsize); //from where we recived the socket
     //printsin( &from, "recv_udp: ", "Packet from:");
     printf("Got data ::%c%ld%c\n",msg.head,(long) ntohl(msg.body),msg.tail); 
-    fflush(stdout);
+    fflush(stdout); // clear stdout after we get the data that the client send
   }
    
   return 0;
