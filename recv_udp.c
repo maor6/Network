@@ -9,15 +9,16 @@
 #include <unistd.h>
 #include <stdio.h>
  
-/*
+
 void printsin(struct sockaddr_in *s, char *str1, char *str2) {
   printf("%s\n", str1);
   printf("%s: ", str2);
-  -- port: sin->sin_port (host integer type) 
-  -- IP: sin->sin_addr (IP in dotted-decimal notation) 
+  printf("%s =%s, %s =%d","ip",inet_ntoa(s->sin_addr),"port",s->sin_port);
+  //-- port: sin->sin_port (host integer type) 
+ // -- IP: sin->sin_addr (IP in dotted-decimal notation) 
   printf("\n");
 }
-*/
+
 
  
 int main(int argc, char *argv[])
@@ -45,7 +46,8 @@ int main(int argc, char *argv[])
   for(;;) { // to litsen all the time to reqeust
     fsize = sizeof(from); 
     cc = recvfrom(socket_fd,&m,sizeof(m),0,(struct sockaddr *)&from,&fsize); //from where we recived the socket
-    //printsin( &from, "recv_udp: ", "Packet from:");
+    printsin( &from, "recv_udp: ", "Packet from:");
+    printf("\n");
     printf("Got data ::%s\n",m);
     sendto(socket_fd,g,sizeof(g),0,(const struct sockaddr *)&from,sizeof(from));
     printf("msg has send");
