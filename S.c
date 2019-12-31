@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
   int socket_fd, cc, fsize;
   struct sockaddr_in  s_in, from; // the socket we send and from the socket we recieve
   struct { char head; u_long  body; char tail;} msg;
-  char m[256];
+  char m[256]; // to save
+  char g[] = "gofna"; // to send
 
 
  
@@ -36,28 +37,29 @@ int main(int argc, char *argv[])
  
   s_in.sin_family = (short)AF_INET; // host byte order (IPv4)
   s_in.sin_addr.s_addr = htonl(INADDR_ANY);    /* WILDCARD */   // host to network long
-  s_in.sin_port = htons((u_short)0x3333); // host to network short
+  s_in.sin_port = htons((u_short)0x5555); // host to network short
  
-  //printsin( &s_in, "RECV_UDP", "Local socket is:"); 
+  printsin( &s_in, "RECV_UDP", "Local socket is:"); 
   fflush(stdout); // clear stdout 
  
   bind(socket_fd, (struct sockaddr *)&s_in, sizeof(s_in)); // connect address and the port with socket
- char g[] = "gofna";
+ 
+
   for(;;) { // to litsen all the time to reqeust
     fsize = sizeof(from); 
     cc = recvfrom(socket_fd,&m,sizeof(m),0,(struct sockaddr *)&from,&fsize); //from where we recived the socket
     printsin( &from, "recv_udp: ", "Packet from:");
     printf("\n");
-    printf("Got data ::%s\n",m);
-    sendto(socket_fd,g,sizeof(g),0,(const struct sockaddr *)&from,sizeof(from));
-    printf("msg has send");
+    printf("Got data :%s\n",m);
+
+    sendto(socket_fd,g,sizeof(g),0,(const struct sockaddr *)&from,sizeof(from)); // send data back
+    //printf("msg has send");
     fflush(stdout); // clear stdout after we get the data that the client send
+     
+     bzero(m, sizeof(m)); //clear what we recv
+    //bzero(g, sizeof(g)); //clear what we send
   }
   
-
-  
-
-
    
   return 0;
 }
