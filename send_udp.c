@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
   struct sockaddr_in  dest;
   struct hostent *hostptr;
   struct { char head; char *body; char tail; } msgbuf;
-  char g[256];
+  char g[256]; // to sava the name
   struct sockaddr_in  s_in, from;
   int cc,len;
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   bcopy(hostptr->h_addr, (char *)&dest.sin_addr,hostptr->h_length);  //copy the dest address
   
   dest.sin_port = htons((u_short)0x6666);  // short, network byte order
-  char m[] = "maor";
+  char m[] = "maor"; // send the name
 /*  
 msgbuf.head = '<'; 
   msgbuf.body = htonl(m);  IMPORTANT!   // host to network long 
@@ -47,7 +47,7 @@ msgbuf.head = '<';
     fsize = sizeof(from); 
     cc = recvfrom(socket_fd,&g,sizeof(g),0,(struct sockaddr *)&dest,&len); //from where we recived the socket
     
-    printf("Got data ::%s\n",g);
+    printf("Got data :%s\n",g);
  }
  
 

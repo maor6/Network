@@ -24,6 +24,7 @@ int main(void)
   socklen_t len; 
   int count;
   
+ // to create a new socket IPv4 TCP
   sock = socket(AF_INET, SOCK_STREAM, 0);  
   if (sock < 0)
     { perror ("Error opening channel");
@@ -34,20 +35,21 @@ int main(void)
   serv_name.sin_family = AF_INET;                                   
   serv_name.sin_port = htons(PORT); 
 
+	// socket connection to an address port
   if (bind(sock, (struct sockaddr *)&serv_name, sizeof(serv_name)) < 0)
     { perror ("Error naming channel");
       clean_up(1, &sock);
     }
       
   printf("Server is alive and waiting for socket connection from client.\n");
-  listen(sock, 1); 
+  listen(sock, 1);  // to be ready to accept new connection
 
   len = sizeof(serv_name);
-  connect_sock = accept(sock, (struct sockaddr *)&serv_name, &len);
+  connect_sock = accept(sock, (struct sockaddr *)&serv_name, &len);// this function listen to TCP-syn .once the server get the syn, a 3 way handshake.
 
   for (count = 1; count <= SIM_LENGTH; count++)
     { 
-	  write(connect_sock, &count, 4);
+	  write(connect_sock, &count, 4);// write data to the socket
       printf("Server has written %d to socket.\n", count);
     }
 

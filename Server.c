@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
   struct sockaddr_in  s_in, from; // the socket we send and from the socket we recieve
   struct { char head; u_long  body; char tail;} msg;
   char m[256]; // to save
-  char g[] = "gofna"; // to send
+  char g[256]; // to send
 
 
  
@@ -45,19 +45,22 @@ int main(int argc, char *argv[])
   bind(socket_fd, (struct sockaddr *)&s_in, sizeof(s_in)); // connect address and the port with socket
  
 
-  for(;;) { // to litsen all the time to reqeust
+  //for(;;) { // to litsen all the time to reqeust
+  while( strcmp(g,"exit")!=0){
     fsize = sizeof(from); 
     cc = recvfrom(socket_fd,&m,sizeof(m),0,(struct sockaddr *)&from,&fsize); //from where we recived the socket
+    
     printsin( &from, "recv_udp: ", "Packet from:");
     printf("\n");
     printf("Got data :%s\n",m);
+    printf("enter a msg to send :");
+    scanf("%s",g); // to send the response to the client
 
     sendto(socket_fd,g,sizeof(g),0,(const struct sockaddr *)&from,sizeof(from)); // send data back
     //printf("msg has send");
-    fflush(stdout); // clear stdout after we get the data that the client send
+   // fflush(stdout); // clear stdout after we get the data that the client send
      
      bzero(m, sizeof(m)); //clear what we recv
-    //bzero(g, sizeof(g)); //clear what we send
   }
   
    

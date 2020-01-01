@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Got data ::%s\n",m);
     sendto(socket_fd,g,sizeof(g),0,(const struct sockaddr *)&from,sizeof(from));
-    printf("msg has send");
     fflush(stdout); // clear stdout after we get the data that the client send
   }
   

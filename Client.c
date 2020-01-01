@@ -52,10 +52,11 @@ msgbuf.head = '<';
  
  bind(socket_fd, (struct sockaddr *)&dest, sizeof(dest));
  
-
- while(scanf("%s",m) !=0 && strcmp(m,"exit")!=0){
-    sendto(socket_fd,m,sizeof(m),0,(struct sockaddr *)&router,sizeof(router));  // send the data
-    printf("sent");      
+ int scan = 1;
+ while(scan !=0 && strcmp(m,"exit")!=0){
+    printf("enter a msg to send :");
+    scanf("%s",m);
+    sendto(socket_fd,m,sizeof(m),0,(struct sockaddr *)&router,sizeof(router));  // send the data      
     cc = recvfrom(socket_fd,&g,sizeof(g),0,(struct sockaddr *)&dest,sizeof(dest)); //from where we recived the socket
     
     printf("Got data :%s\n",g);

@@ -11,7 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-/*
+
 void printsin(struct sockaddr_in *s, char *str1, char *str2) {
   printf("%s\n", str1);
   printf("%s ip=%s, port=%d", str2, inet_ntoa(s->sin_addr), s->sin_port);
@@ -19,7 +19,6 @@ void printsin(struct sockaddr_in *s, char *str1, char *str2) {
   //-- IP: sin->sin_addr (IP in dotted-decimal notation) 
   printf("\n");
 }
-*/
 
 
 int main(int argc, char *argv[])
@@ -30,7 +29,7 @@ int main(int argc, char *argv[])
   struct sockaddr_in  s_in , s_in2, from, router; //creat socketaddr : s to client ,  s2 to server , from to the recv, router  me
  
   
-  double X = 0.20;
+  double X;
   char data[256];
 
   unsigned short server_port, client_port, router_port;
@@ -78,8 +77,8 @@ int main(int argc, char *argv[])
 
   
   bind(socket_fd, (struct sockaddr *)&router, sizeof(router)); // connect address and the port with socket to listen
-
-  
+ printf("enter a number X:");
+  scanf("%lf",&X);
   for(;;) {  // to litsen all the time to reqeust
     bzero(&data,sizeof(data)); // to reset the data
 
@@ -98,7 +97,7 @@ int main(int argc, char *argv[])
     
     if(from.sin_port == server_port) // send to client
     {
-      printf("[SERVER]\n"); 
+      printf("the SERVER\n"); 
       fsize = sizeof(s_in);
       sendto(socket_fd,&data,sizeof(data),0,(struct sockaddr *)&s_in,fsize);
     } 
@@ -116,7 +115,7 @@ int main(int argc, char *argv[])
       }
         
         
-      printf("[CLIENT]\n");
+      printf("the CLIENT\n");
       fsize = sizeof(s_in2);
       sendto(socket_fd,&data,sizeof(data),0,(struct sockaddr *)&s_in2,fsize);
       
